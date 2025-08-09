@@ -1,0 +1,57 @@
+name: my_battle_game
+description: "1v1 Battle Game vs AI using Flutter & Flame"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  
+  # Game engine
+  flame: ^1.20.0
+  flame_audio: ^2.2.0
+  flame_behaviors: ^1.2.0
+
+  # Joystick / UI widgets
+  flutter_joystick: ^0.2.1
+  flutter_svg: ^2.1.0
+
+  # State management
+  provider: ^6.1.5
+
+  # Animations
+  flutter_animate: ^4.5.2
+  lottie: ^2.7.0
+
+  # Math & vector utilities
+  vector_math: ^2.1.4
+
+  # Sound & vibration feedback
+  vibration: ^1.8.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/sprites/player/
+    - assets/sprites/enemy/
+    - assets/sfx/
+    - assets/ui/
+
+  fonts:
+    - family: Orbitron
+      fonts:
+        - asset: assets/fonts/Orbitron-Regular.ttf
+        - asset: assets/fonts/Orbitron-Bold.ttf
+          weight: 700
