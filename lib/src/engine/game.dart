@@ -41,12 +41,13 @@ class MyBattleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   void update(double dt) {
     super.update(dt);
-    // update projectiles (basic)
-    for (var p in List<Projectile>.from(projectiles)) {
+    // update projectiles (basic) - iterate backwards to safely remove elements
+    for (int i = projectiles.length - 1; i >= 0; i--) {
+      final p = projectiles[i];
       p.update(dt);
       if (p.shouldRemove) {
         p.removeFromParent();
-        projectiles.remove(p);
+        projectiles.removeAt(i);
       }
     }
   }
@@ -130,7 +131,11 @@ class Player extends PositionComponent {
     super.update(dt);
 
     // movement
-    velocity = moveInput.normalised() * (speed * moveInput.length);
+    if (moveInput.length > 0) {
+      velocity = moveInput.normalised() * (speed * moveInput.length);
+    } else {
+      velocity = Vector2.zero();
+    }
     position += velocity * dt;
 
     // clamp inside world bounds
@@ -149,6 +154,8 @@ class Player extends PositionComponent {
     hp = (hp - dmg).clamp(0, maxHp);
     // on damage maybe gain small charge (counterplay)
     charge = (charge + dmg * 0.2).clamp(0, chargeMax);
+    // ensure ultiReady is updated after charge change
+    ultiReady = charge >= chargeMax;
   }
 
   // Basic attack: instant melee check
@@ -414,6 +421,8 @@ class Enemy extends PositionComponent {
   void receiveDamage(double dmg) {
     hp = (hp - dmg).clamp(0, maxHp);
     charge = (charge + dmg * 0.4).clamp(0, chargeMax);
+    // ensure ultiReady is updated after charge change
+    ultiReady = charge >= chargeMax;
     // if HP very low, try retreat on non-hard or on some chance
     if (hp / maxHp < 0.25 && difficulty != EnemyDifficulty.hard) {
       state = EnemyState.retreat;
